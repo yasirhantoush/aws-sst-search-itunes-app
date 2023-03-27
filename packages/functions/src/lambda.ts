@@ -16,10 +16,10 @@ export const hellowWorldHandler = ApiHandler(async (_evt) => {
 export const searchItunesPodcastsHandler = ApiHandler(async (_evt) => {
   // call itunes api
   const term = _evt.queryStringParameters?.term || '';
-  let searchResults;
+  let data: ITunesSearchResponseDTO;
   try {
     const response = await axios.get(`https://itunes.apple.com/search?term=${term}`);
-    searchResults = response.data;
+    data = response.data;
   } catch (e: any) {
     return {
       statusCode: 500,
@@ -35,7 +35,8 @@ export const searchItunesPodcastsHandler = ApiHandler(async (_evt) => {
       id: uuid.v1(), // A unique uuid
       userId: "123", // The id of the author
       searchTerm: term,
-      searchResults: searchResults,
+      searchResults: data.results,
+      searchResultCount: data.resultCount,
       createdAt: Date.now(), // Current Unix timestamp
     },
   };
@@ -49,7 +50,7 @@ export const searchItunesPodcastsHandler = ApiHandler(async (_evt) => {
     };
   }
 
-  return { body: searchResults };
+  return { body: JSON.stringify(data.results) };
 
 });
 

@@ -9,6 +9,7 @@ export function StorageStack({ stack, app }: any) {
       userId: "string",
       searchTerm: "string",
       searchResults: "string",
+      searchResultCount: "number",
     },
     primaryIndex: { partitionKey: "id", sortKey: "searchTerm" },
   });
